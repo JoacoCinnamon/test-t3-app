@@ -4,7 +4,6 @@ import LoadingSpinner from "./LoadingSpinner";
 import { useState } from "react";
 import siteConfig from "~/config/site";
 import LinkUnderlined from "./LinkUnderlined";
-import Image from "next/image";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);

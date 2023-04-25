@@ -30,7 +30,7 @@ function LoadingSpinner({ size, color }: Props) {
           fill="currentFill"
         />
       </svg>
-      <span className="sr-only">Loading...</span>
+      <span className="sr-only">Cargando...</span>
     </div>
   );
 }
