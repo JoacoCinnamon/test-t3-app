@@ -6,7 +6,7 @@ import "~/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { esES } from "@clerk/localizations";
-import { NavBar } from "~/components/NavBar";
+import Navbar from "~/components/NavBar";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
@@ -15,7 +15,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       localization={esES}
       {...pageProps}
     >
-      <NavBar />
+      <Navbar />
       <Component {...pageProps} />
     </ClerkProvider>
   );
