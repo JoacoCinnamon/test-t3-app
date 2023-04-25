@@ -6,7 +6,7 @@ import siteConfig from "~/config/site";
 import LinkUnderlined from "./LinkUnderlined";
 import Image from "next/image";
 
-const NavBar = () => {
+export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const user = useUser();
   return (
@@ -133,5 +133,3 @@ const NavBar = () => {
     </header>
   );
 };
-
-export default NavBar;
