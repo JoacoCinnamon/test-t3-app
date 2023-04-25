@@ -3,106 +3,135 @@ import Link from "next/link";
 import LoadingSpinner from "./LoadingSpinner";
 import { useState } from "react";
 import siteConfig from "~/config/site";
+import LinkUnderlined from "./LinkUnderlined";
+import Image from "next/image";
 
-const Navbar = () => {
+const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const user = useUser();
   return (
-    <header className="relative z-50 flex w-full flex-wrap bg-white p-6 text-sm dark:bg-gray-800 sm:flex-nowrap sm:justify-start">
+    <header className="bg-white">
       <nav
-        className="mx-auto w-full max-w-[85rem]  p-1 px-4 sm:flex sm:items-center sm:justify-between"
+        className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
         aria-label="Global"
       >
-        <div className="flex items-center justify-between">
-          <h2 className="flex-none text-xl font-semibold dark:text-white">
-            Etiquetando
-          </h2>
-          <div className="sm:hidden">
+        <div className="flex lg:flex-1">
+          <Link href="/" className="-m-1.5 p-1.5">
+            <span className="sr-only">{siteConfig.title}</span>
+            Logo
+          </Link>
+        </div>
+        <div className="flex lg:hidden">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            type="button"
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+          >
+            <span className="sr-only">Abrir menu</span>
+            <svg
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.5"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"
+              />
+            </svg>
+          </button>
+        </div>
+        <div className="hidden lg:flex lg:gap-x-12">
+          {siteConfig.navbar.map((link) => (
+            <LinkUnderlined href={link.href} key={link.href}>
+              {link.title}
+            </LinkUnderlined>
+          ))}
+        </div>
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+          {user.isLoaded ? (
+            <>
+              {!user.isSignedIn && (
+                <LinkUnderlined href="/iniciar-sesion">
+                  Iniciar Sesion <span aria-hidden="true">&rarr;</span>
+                </LinkUnderlined>
+              )}
+              {user.isSignedIn && <UserButton />}
+            </>
+          ) : (
+            <LoadingSpinner size="24" color="purple" />
+          )}
+        </div>
+      </nav>
+      <div className="lg:hidden" role="dialog" aria-modal="true">
+        <div
+          className={`fixed ${
+            isOpen ? "hidden" : ""
+          }  inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="font-bold">{siteConfig.title}</span>
             <button
               onClick={() => setIsOpen(!isOpen)}
               type="button"
-              className="hs-collapse-toggle inline-flex items-center justify-center gap-2 rounded-md border bg-white p-2 align-middle text-sm font-medium text-gray-700 shadow-sm transition-all hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:ring-offset-2 focus:ring-offset-white dark:border-gray-700 dark:bg-slate-900 dark:text-gray-400 dark:hover:bg-slate-800 dark:hover:text-white dark:focus:ring-offset-gray-800"
-              data-hs-collapse="#navbar-with-mega-menu"
-              aria-controls="navbar-with-mega-menu"
-              aria-label="Toggle navigation"
+              className="-m-2.5 rounded-md p-2.5 text-gray-700"
             >
+              <span className="sr-only">Cerrar menu</span>
               <svg
-                className="hs-collapse-open:hidden h-4 w-4"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                aria-hidden="true"
               >
                 <path
-                  fillRule="evenodd"
-                  d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5zm0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5z"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
                 />
-              </svg>
-              <svg
-                className="hs-collapse-open:block hidden h-4 w-4"
-                width="16"
-                height="16"
-                fill="currentColor"
-                viewBox="0 0 16 16"
-              >
-                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z" />
               </svg>
             </button>
           </div>
-        </div>
-        <div
-          id="navbar-with-mega-menu"
-          className={`hs-collapse ${
-            isOpen ? "hidden" : "block"
-          }  grow basis-full overflow-hidden  p-1 transition-all duration-300 sm:block`}
-        >
-          <ul className="mt-5 flex flex-col gap-5   sm:mt-0 sm:flex-row sm:items-center sm:justify-end sm:pl-5">
-            <li>
-              <Link
-                href="/"
-                className="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500"
-              >
-                Inicio
-              </Link>
-            </li>
-            {user.isLoaded ? (
-              <>
-                {!user.isSignedIn && (
-                  <li>
-                    <Link
-                      href="/sign-in"
-                      className="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500"
-                    >
-                      Iniciar Sesion
-                    </Link>
-                  </li>
-                )}
-                {user.isSignedIn && (
+          <div className="mt-6 flow-root">
+            <div className="-my-6 divide-y divide-gray-500/10">
+              <div className="space-y-2 py-6">
+                {siteConfig.navbar.map((link) => (
+                  <Link
+                    href={link.href}
+                    key={link.href}
+                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                  >
+                    {link.title}
+                  </Link>
+                ))}
+              </div>
+              <div className="py-6">
+                {user.isLoaded ? (
                   <>
-                    {siteConfig.navbar.map((link) => {
-                      <li>
-                        <Link
-                          className="font-medium text-gray-600 hover:text-gray-400 dark:text-gray-400 dark:hover:text-gray-500"
-                          href={link.href}
-                        >
-                          {link.title}
-                        </Link>
-                      </li>;
-                    })}
-                    <li>
-                      <UserButton userProfileMode="modal" />
-                    </li>
+                    {!user.isSignedIn && (
+                      <Link
+                        href="/iniciar-sesion"
+                        className="text-sm font-semibold leading-6 text-gray-900"
+                      >
+                        Iniciar Sesion <span aria-hidden="true">&rarr;</span>
+                      </Link>
+                    )}
+                    {user.isSignedIn && <UserButton />}
                   </>
+                ) : (
+                  <LoadingSpinner size="30" color="gray" />
                 )}
-              </>
-            ) : (
-              <LoadingSpinner size="24" />
-            )}
-          </ul>
+              </div>
+            </div>
+          </div>
         </div>
-      </nav>
+      </div>
     </header>
   );
 };
 
-export default Navbar;
+export default NavBar;

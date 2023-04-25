@@ -18,5 +18,16 @@ const config = {
     locales: ["es"],
     defaultLocale: "es",
   },
+  images: {
+    dangerouslyAllowSVG: true,
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "tailwindui.com",
+        port: "",
+        pathname: "/img/logos/**",
+      },
+    ],
+  },
 };
 export default config;

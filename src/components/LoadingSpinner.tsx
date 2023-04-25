@@ -1,11 +1,20 @@
-type Props = { size: string };
-
-function LoadingSpinner({ size }: Props) {
+type Colors = "blue" | "purple" | "green" | "red" | "gray";
+type Props = { size: string; color: Colors };
+const DEFAULT_COLOR = "fill-gray-600 dark:fill-gray-300";
+const colors = new Map<string, string>()
+  .set("blue", "fill-blue-600")
+  .set("purple", "fill-purple-600")
+  .set("green", "fill-green-600")
+  .set("red", "fill-red-600")
+  .set("gray", DEFAULT_COLOR);
+function LoadingSpinner({ size, color }: Props) {
   return (
     <div role="status">
       <svg
         aria-hidden="true"
-        className="mr-2 inline animate-spin fill-gray-600 text-gray-200 dark:fill-gray-300 dark:text-gray-600"
+        className={`mr-2  inline animate-spin text-gray-200 dark:text-gray-600 ${
+          colors.get(color) ?? DEFAULT_COLOR
+        }`}
         viewBox="0 0 100 101"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
