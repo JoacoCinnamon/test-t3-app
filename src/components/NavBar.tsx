@@ -1,15 +1,17 @@
-import { UserButton, useUser } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
 import LoadingSpinner from "./LoadingSpinner";
 import { useState } from "react";
 import siteConfig from "~/config/site";
 import LinkUnderlined from "./LinkUnderlined";
+import ThemeToggler from "./ThemeToggler";
+import SignOutButton from "./SignOutButton";
 
 export const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const user = useUser();
   return (
-    <header className="bg-white">
+    <header className="bg-white dark:bg-zinc-900">
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8"
         aria-label="Global"
@@ -22,9 +24,9 @@ export const NavBar = () => {
         </div>
         <div className="flex lg:hidden">
           <button
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setIsOpen(true)}
             type="button"
-            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700"
+            className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-slate-100"
           >
             <span className="sr-only">Abrir menu</span>
             <svg
@@ -50,33 +52,34 @@ export const NavBar = () => {
             </LinkUnderlined>
           ))}
         </div>
-        <div className="hidden lg:flex lg:flex-1 lg:justify-end">
+        <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">
+          <ThemeToggler />
           {user.isLoaded ? (
             <>
               {!user.isSignedIn && (
-                <LinkUnderlined href="/iniciar-sesion">
+                <LinkUnderlined href="/iniciar-sesion" color="purple">
                   Iniciar Sesion <span aria-hidden="true">&rarr;</span>
                 </LinkUnderlined>
               )}
-              {user.isSignedIn && <UserButton />}
+              {user.isSignedIn && <SignOutButton />}
             </>
           ) : (
-            <LoadingSpinner size="24" color="purple" />
+            <LoadingSpinner size="24" color="purple" /> // o null
           )}
         </div>
       </nav>
       <div className="lg:hidden" role="dialog" aria-modal="true">
         <div
           className={`fixed ${
-            isOpen ? "hidden" : ""
-          }  inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10`}
+            isOpen ? "" : "hidden"
+          }  inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 dark:bg-zinc-900 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10`}
         >
           <div className="flex items-center justify-between">
             <span className="font-bold">{siteConfig.title}</span>
             <button
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={() => setIsOpen(false)}
               type="button"
-              className="-m-2.5 rounded-md p-2.5 text-gray-700"
+              className="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-slate-100"
             >
               <span className="sr-only">Cerrar menu</span>
               <svg
@@ -102,7 +105,7 @@ export const NavBar = () => {
                   <Link
                     href={link.href}
                     key={link.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
+                    className="-mx-3 block  rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-slate-100 dark:hover:bg-zinc-800"
                   >
                     {link.title}
                   </Link>
@@ -114,16 +117,17 @@ export const NavBar = () => {
                     {!user.isSignedIn && (
                       <Link
                         href="/iniciar-sesion"
-                        className="text-sm font-semibold leading-6 text-gray-900"
+                        className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-100"
                       >
-                        Iniciar Sesion <span aria-hidden="true">&rarr;</span>
+                        Iniciar Sesion
                       </Link>
                     )}
-                    {user.isSignedIn && <UserButton />}
+                    {user.isSignedIn && <SignOutButton />}
                   </>
                 ) : (
-                  <LoadingSpinner size="30" color="gray" />
+                  <LoadingSpinner size="25" color="purple" />
                 )}
+                <ThemeToggler />
               </div>
             </div>
           </div>
