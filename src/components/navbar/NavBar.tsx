@@ -1,15 +1,20 @@
-import { useUser } from "@clerk/nextjs";
 import Link from "next/link";
-import LoadingSpinner from "./LoadingSpinner";
+import { useUser } from "@clerk/nextjs";
 import { useState } from "react";
 import siteConfig from "~/config/site";
-import LinkUnderlined from "./LinkUnderlined";
-import ThemeToggler from "./ThemeToggler";
-import SignOutButton from "./SignOutButton";
+import {
+  NavLink,
+  LoadingSpinner,
+  ThemeToggler,
+  SignOutButton,
+} from "~/components/index";
+import { SideNavLink } from "./SideNavLink";
+import { SideSignOutButton } from "./SideSignOutButton";
 
-export const NavBar = () => {
+function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const user = useUser();
+
   return (
     <header className="bg-white dark:bg-zinc-900">
       <nav
@@ -24,7 +29,7 @@ export const NavBar = () => {
         </div>
         <div className="flex lg:hidden">
           <button
-            onClick={() => setIsOpen(true)}
+            onClick={() => setIsOpen(!isOpen)}
             type="button"
             className="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700 dark:text-slate-100"
           >
@@ -47,9 +52,9 @@ export const NavBar = () => {
         </div>
         <div className="hidden lg:flex lg:gap-x-12">
           {siteConfig.navbar.map((link) => (
-            <LinkUnderlined href={link.href} key={link.href}>
+            <NavLink href={link.href} key={link.href}>
               {link.title}
-            </LinkUnderlined>
+            </NavLink>
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end lg:gap-x-4">
@@ -57,9 +62,9 @@ export const NavBar = () => {
           {user.isLoaded ? (
             <>
               {!user.isSignedIn && (
-                <LinkUnderlined href="/iniciar-sesion" color="purple">
+                <NavLink href="/iniciar-sesion" color="purple">
                   Iniciar Sesion <span aria-hidden="true">&rarr;</span>
-                </LinkUnderlined>
+                </NavLink>
               )}
               {user.isSignedIn && <SignOutButton />}
             </>
@@ -77,7 +82,7 @@ export const NavBar = () => {
           <div className="flex items-center justify-between">
             <span className="font-bold">{siteConfig.title}</span>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => setIsOpen(!isOpen)}
               type="button"
               className="-m-2.5 rounded-md p-2.5 text-gray-700 dark:text-slate-100"
             >
@@ -102,27 +107,27 @@ export const NavBar = () => {
             <div className="-my-6 divide-y divide-gray-500/10">
               <div className="space-y-2 py-6">
                 {siteConfig.navbar.map((link) => (
-                  <Link
+                  <SideNavLink
                     href={link.href}
                     key={link.href}
-                    className="-mx-3 block  rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50 dark:text-slate-100 dark:hover:bg-zinc-800"
+                    onClick={() => setIsOpen(!isOpen)}
                   >
                     {link.title}
-                  </Link>
+                  </SideNavLink>
                 ))}
               </div>
               <div className="py-6">
                 {user.isLoaded ? (
                   <>
                     {!user.isSignedIn && (
-                      <Link
+                      <SideNavLink
                         href="/iniciar-sesion"
-                        className="text-sm font-semibold leading-6 text-gray-900 dark:text-slate-100"
+                        onClick={() => setIsOpen(!isOpen)}
                       >
                         Iniciar Sesion
-                      </Link>
+                      </SideNavLink>
                     )}
-                    {user.isSignedIn && <SignOutButton />}
+                    {user.isSignedIn && <SideSignOutButton />}
                   </>
                 ) : (
                   <LoadingSpinner size="25" color="purple" />
@@ -135,4 +140,6 @@ export const NavBar = () => {
       </div>
     </header>
   );
-};
+}
+
+export { NavBar };

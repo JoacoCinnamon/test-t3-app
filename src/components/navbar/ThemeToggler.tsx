@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 
-const ThemeToggler = () => {
+function ThemeToggler() {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
 
@@ -23,6 +23,6 @@ const ThemeToggler = () => {
       <span className="sr-only">Cambiar modo claro o modo oscuro</span>
     </button>
   );
-};
+}
 
-export default ThemeToggler;
+export { ThemeToggler };

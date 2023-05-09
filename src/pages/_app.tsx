@@ -6,12 +6,12 @@ import "~/styles/globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { dark } from "@clerk/themes";
 import { esES } from "@clerk/localizations";
-import { NavBar } from "../components/NavBar";
+import { NavBar } from "~/components/index";
 import { ThemeProvider } from "next-themes";
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <ThemeProvider attribute="class">
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <ClerkProvider
         appearance={{ baseTheme: dark }}
         localization={esES}
